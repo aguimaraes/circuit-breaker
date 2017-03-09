@@ -1,0 +1,16 @@
+{
+    "name": "aguimaraes/circuit-breaker",
+    "description": "Implementation of the circuit breaker pattern",
+    "type": "library",
+    "require": {
+        "php": "^7.1",
+        "predis/predis": "^1.1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alvaro Guimaraes",
+            "email": "alvaroguimaraes@gmail.com"
+        }
+    ]
+}
