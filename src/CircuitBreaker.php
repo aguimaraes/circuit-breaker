@@ -31,19 +31,9 @@ class CircuitBreaker implements CircuitBreakerInterface
      */
     public function isAvailable(string $service = 'default'): bool
     {
-        $errorCount =$this->adapter->getErrorCount($service);
-
-        if ($errorCount <= $this->getThreshold($service)) {
-            return true;
-        }
-
-        $lastCheck = $this->adapter->getLastCheck($service);
-
-        if ($lastCheck + $this->getTimeout($service) >= time()) {
+        if ($this->adapter->getErrorCount($service) > $this->getThreshold($service)) {
             return false;
         }
-
-        $this->adapter->updateLastCheck($service);
 
         return true;
     }
@@ -53,7 +43,7 @@ class CircuitBreaker implements CircuitBreakerInterface
      */
     public function reportFailure(string $service = 'default'): void
     {
-        $this->adapter->setErrorCount($service, $this->adapter->getErrorCount($service) + 1);
+        $this->adapter->incrErrorCount($service, 1);
         $this->adapter->updateLastCheck($service);
     }
 
@@ -70,10 +60,9 @@ class CircuitBreaker implements CircuitBreakerInterface
             return;
         }
 
-        $this->adapter->setErrorCount(
-            $service,
-            $this->adapter->getErrorCount($service) - 1
-        );
+        if ($error_count > 0) {
+            $this->adapter->decrErrorCount($service, 1);
+        }
     }
 
     /**
