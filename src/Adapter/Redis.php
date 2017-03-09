@@ -25,56 +25,61 @@ class Redis implements AdapterInterface
     /**
      * @inheritdoc
      */
-    public function setErrorCount(string $service = 'default', int $value = 0): void
-    {
-        $this->redis->set(
-            sprintf('%s.%s.error_count', $this->prefix, $service),
-            $value
-        );
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getErrorCount(string $service = 'default'): int
     {
-        return $this->getKey(
-            sprintf('%s.%s.error_count', $this->prefix, $service)
+        return (int)$this->redis->get(
+            sprintf('%s.%s.control', $this->prefix, $service)
         );
     }
 
     /**
      * @inheritdoc
      */
-    public function getLastCheck(string $service = 'default'): int
+    public function incrementErrorCount(string $service = 'default', int $value = 1): void
     {
-        return $this->getKey(
-            sprintf('%s.%s.last_check', $this->prefix, $service)
+        $this->redis->incrBy(
+            sprintf('%s.%s.control', $this->prefix, $service),
+            $value
         );
+        $this->updateLastCheck($service);
     }
 
     /**
      * @inheritdoc
      */
-    public function updateLastCheck(string $service = 'default'): int
+    public function decrementErrorCount(string $service = 'default', int $value = 1): void
+    {
+        $this->redis->decrBy(
+            sprintf('%s.%s.control', $this->prefix, $service),
+            $value
+        );
+        $this->updateLastCheck($service);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function breakCircuit(string $service = 'default', int $ttl = 10): void
     {
         $this->redis->set(
-            sprintf('%s.%s.last_check', $this->prefix, $service),
+            sprintf('%s.%s.break', $this->prefix, $service),
             time()
+        );
+        $this->redis->expire(
+            sprintf('%s.%s.break', $this->prefix, $service),
+            $ttl
         );
     }
 
     /**
-     * @param string $key
-     *
-     * @return int
+     * @inheritdoc
      */
-    private function getKey(string $key): int
+    public function isCircuitBroke(string $service = 'default'): bool
     {
-        if (!$this->redis->exists($key)) {
-            return 0;
-        }
+        $response = $this->redis->exists(
+            sprintf('%s.%s.break', $this->prefix, $service)
+        );
 
-        return (int) $this->redis->get($key);
+        return ($response === 1);
     }
 }
