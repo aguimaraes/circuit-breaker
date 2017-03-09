@@ -19,15 +19,20 @@ interface AdapterInterface
 
     /**
      * @param string $service
-     *
-     * @return int
+     * @param int $value
      */
-    public function getLastCheck(string $service = 'default'): int;
+    public function incrErrorCount(string $service = 'default', int $value = 1): void;
+
+    /**
+     * @param string $service
+     * @param int $value
+     */
+    public function decrErrorCount(string $service = 'default', int $value = 1): void;
 
     /**
      * @param string $service
      *
      * @return int
      */
-    public function updateLastCheck(string $service = 'default'): int;
+    public function updateLastCheck(string $service = 'default', int $timeout): void;
 }
