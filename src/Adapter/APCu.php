@@ -2,9 +2,7 @@
 
 namespace Aguimaraes\Adapter;
 
-use Aguimaraes\Adapter\AdapterInterface;
-
-class ACPu implements AdapterInterface
+class APCu implements AdapterInterface
 {
     private $prefix = 'circuit_breaker';
 
@@ -13,7 +11,7 @@ class ACPu implements AdapterInterface
      */
     public function setErrorCount(string $service = 'default', int $value = 0): void
     {
-        acpu_store(
+        apcu_store(
             sprintf('%s.%s.error_count', $this->prefix, $service),
             $value
         );
@@ -24,7 +22,7 @@ class ACPu implements AdapterInterface
      */
     public function getErrorCount(string $service = 'default'): int
     {
-        return acpu_fetch(
+        return apcu_fetch(
             sprintf('%s.%s.error_count', $this->prefix, $service)
         );
     }
@@ -34,7 +32,7 @@ class ACPu implements AdapterInterface
      */
     public function getLastCheck(string $service = 'default'): int
     {
-        return acpu_fetch(
+        return apcu_fetch(
             sprintf('%s.%s.last_check', $this->prefix, $service)
         );
     }
