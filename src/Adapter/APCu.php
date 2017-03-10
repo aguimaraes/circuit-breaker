@@ -22,7 +22,7 @@ class APCu implements AdapterInterface
      */
     public function getErrorCount(string $service = 'default'): int
     {
-        return apcu_fetch(
+        return (int) apcu_fetch(
             sprintf('%s.%s.error_count', $this->prefix, $service)
         );
     }
@@ -32,7 +32,7 @@ class APCu implements AdapterInterface
      */
     public function getLastCheck(string $service = 'default'): int
     {
-        return apcu_fetch(
+        return (int) apcu_fetch(
             sprintf('%s.%s.last_check', $this->prefix, $service)
         );
     }
@@ -43,7 +43,7 @@ class APCu implements AdapterInterface
     public function updateLastCheck(string $service = 'default'): int
     {
         $time = time();
-        acpu_store(
+        apcu_store(
             sprintf('%s.%s.last_check', $this->prefix, $service),
             $time
         );
