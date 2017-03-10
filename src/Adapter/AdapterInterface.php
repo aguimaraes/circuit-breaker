@@ -20,6 +20,15 @@ interface AdapterInterface
      */
     public function decrementControl(string $service = 'default', int $value = 1): void;
 
+
+    /**
+     * Returns the service control counter
+     *
+     * @param string $service
+     * @return int
+     */
+    public function getControl(string $service): int;
+
     /**
      * Mark the service as broken
      *

@@ -51,6 +51,16 @@ class Redis implements AdapterInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getControl(string $service): int
+    {
+        return (int) $this->redis->get(
+            sprintf('%s.%s.control', $this->prefix, $service)
+        );
+    }
+
+    /**
      * Mark the service as broken
      *
      * @param string $service
