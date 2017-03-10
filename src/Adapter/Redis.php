@@ -38,10 +38,10 @@ class Redis implements AdapterInterface
     public function incrementErrorCount(string $service = 'default', int $value = 1): void
     {
         $this->redis->incrBy(
-            sprintf('%s.%s.control', $this->prefix, $service),
+            sprintf('%s.%s.threshold', $this->prefix, $service),
             $value
         );
-        $this->updateLastCheck($service);
+        $this->$this->updateLastCheck($service);
     }
 
     /**
@@ -50,10 +50,10 @@ class Redis implements AdapterInterface
     public function decrementErrorCount(string $service = 'default', int $value = 1): void
     {
         $this->redis->decrBy(
-            sprintf('%s.%s.control', $this->prefix, $service),
+            sprintf('%s.%s.threshold', $this->prefix, $service),
             $value
         );
-        $this->updateLastCheck($service);
+        $this->$this->updateLastCheck($service);
     }
 
     /**
@@ -76,10 +76,21 @@ class Redis implements AdapterInterface
      */
     public function isCircuitBroke(string $service = 'default'): bool
     {
-        $response = $this->redis->exists(
+        return (bool) $this->redis->exists(
             sprintf('%s.%s.break', $this->prefix, $service)
         );
+    }
 
-        return ($response === 1);
+    /**
+     * @param string $service
+     *
+     * @return int
+     */
+    public function updateLastCheck(string $service = 'default'): int
+    {
+        $this->redis->set(
+            sprintf('%s.%s.last_check', $this->prefix, $service),
+            time()
+        );
     }
 }
