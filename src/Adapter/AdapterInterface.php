@@ -5,29 +5,48 @@ namespace Aguimaraes\Adapter;
 interface AdapterInterface
 {
     /**
+     * Increment the service control counter
+     *
      * @param string $service
      * @param int $value
      */
-    public function setErrorCount(string $service = 'default', int $value = 0): void;
+    public function incrementControl(string $service = 'default', int $value = 0): void;
 
     /**
-     * @param string $service
+     * Decrement the service control counter
      *
-     * @return int
+     * @param string $service
+     * @param int $value
      */
-    public function getErrorCount(string $service = 'default'): int;
+    public function decrementControl(string $service = 'default', int $value = 0): void;
 
     /**
-     * @param string $service
+     * Mark the service as broken
      *
-     * @return int
+     * @param string $service
      */
-    public function getLastCheck(string $service = 'default'): int;
+    public function circuitBreak(string $service = 'default'): void;
 
     /**
-     * @param string $service
+     * Check if service is broken
      *
+     * @param string $service
+     */
+    public function isBroken(string $service = 'default'): void;
+
+    /**
+     * Return the time when break is started
+     *
+     * @param string $service
      * @return int
      */
-    public function updateLastCheck(string $service = 'default'): int;
+    public function getBrokenTime(string $service = 'default'): int;
+
+    /**
+     * Returns how many time rest to expire the break
+     *
+     * @param string $service
+     * @return int
+     */
+    public function getBreakTTL(string $service = 'default'): int;
 }
