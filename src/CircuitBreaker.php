@@ -31,19 +31,34 @@ class CircuitBreaker implements CircuitBreakerInterface
      */
     public function isAvailable(string $service = 'default'): bool
     {
-        $errorCount = $this->adapter->getErrorCount($service);
-
-        if ($errorCount <= $this->getThreshold($service)) {
-            return true;
-        }
-
-        $lastCheck = $this->adapter->getLastCheck($service);
-
-        if ($lastCheck + $this->getTimeout($service) >= time()) {
+        if ($this->isServiceBroken($service)) {
             return false;
         }
 
-        $this->adapter->updateLastCheck($service);
+        $counter = $this->adapter->getControl($service);
+        if ($counter > $this->getThreshold($service)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param string $service
+     * @return bool
+     */
+    private function isServiceBroken(string $service): bool
+    {
+        $isBroken = $this->adapter->isBroken($service);
+
+        if ($isBroken === false) {
+            return false;
+        }
+
+        $toleranceTime = $this->adapter->getBrokenTime($service) + $this->getTimeout($service);
+        if ($toleranceTime >= time()) {
+            return false;
+        }
 
         return true;
     }
@@ -53,8 +68,7 @@ class CircuitBreaker implements CircuitBreakerInterface
      */
     public function reportFailure(string $service = 'default'): void
     {
-        $this->adapter->setErrorCount($service, $this->adapter->getErrorCount($service) + 1);
-        $this->adapter->updateLastCheck($service);
+        $this->adapter->incrementControl($service);
     }
 
     /**
@@ -62,18 +76,16 @@ class CircuitBreaker implements CircuitBreakerInterface
      */
     public function reportSuccess(string $service = 'default'): void
     {
-        if ($this->adapter->getErrorCount($service) > $this->getThreshold($service)) {
-            $this->adapter->setErrorCount(
-                $service,
-                $this->getThreshold($service) - 1
-            );
+        $control = $this->adapter->getControl($service);
+
+        if ($control > $this->getThreshold($service)) {
+            $value = $control - ($this->getThreshold($service) - 1);
+
+            $this->adapter->decrementControl($service, $value);
             return;
         }
 
-        $this->adapter->setErrorCount(
-            $service,
-            $this->adapter->getErrorCount($service) - 1
-        );
+        $this->adapter->decrementControl($service);
     }
 
     /**
