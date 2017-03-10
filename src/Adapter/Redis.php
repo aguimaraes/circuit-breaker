@@ -64,12 +64,14 @@ class Redis implements AdapterInterface
      * Mark the service as broken
      *
      * @param string $service
+     * @param int $ttl
      */
-    public function circuitBreak(string $service = 'default'): void
+    public function circuitBreak(string $service = 'default', int $ttl): void
     {
         $this->redis->set(
             sprintf('%s.%s.break', $this->prefix, $service),
-            time()
+            time(),
+            $ttl
         );
     }
 

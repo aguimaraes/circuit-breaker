@@ -33,8 +33,9 @@ interface AdapterInterface
      * Mark the service as broken
      *
      * @param string $service
+     * @param int $ttl
      */
-    public function circuitBreak(string $service = 'default'): void;
+    public function circuitBreak(string $service = 'default', int $ttl): void;
 
     /**
      * Check if service is broken
