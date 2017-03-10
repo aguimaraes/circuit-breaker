@@ -31,7 +31,7 @@ class CircuitBreaker implements CircuitBreakerInterface
      */
     public function isAvailable(string $service = 'default'): bool
     {
-        $errorCount =$this->adapter->getErrorCount($service);
+        $errorCount = $this->adapter->getErrorCount($service);
 
         if ($errorCount <= $this->getThreshold($service)) {
             return true;
@@ -106,5 +106,13 @@ class CircuitBreaker implements CircuitBreakerInterface
     public function setTimeout(int $value, string $service = 'default')
     {
         $this->timeout[$service] = $value;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAdapter(): AdapterInterface
+    {
+        return $this->adapter;
     }
 }

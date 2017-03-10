@@ -2,6 +2,8 @@
 
 namespace Aguimaraes;
 
+use Aguimaraes\Adapter\AdapterInterface;
+
 interface CircuitBreakerInterface
 {
     /**
@@ -50,4 +52,9 @@ interface CircuitBreakerInterface
      * @return mixed
      */
     public function setTimeout(int $value, string $service = 'default');
+
+    /**
+     * @return AdapterInterface
+     */
+    public function getAdapter(): AdapterInterface;
 }
