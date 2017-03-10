@@ -10,7 +10,7 @@ interface AdapterInterface
      * @param string $service
      * @param int $value
      */
-    public function incrementControl(string $service = 'default', int $value = 0): void;
+    public function incrementControl(string $service = 'default', int $value = 1): void;
 
     /**
      * Decrement the service control counter
@@ -18,7 +18,7 @@ interface AdapterInterface
      * @param string $service
      * @param int $value
      */
-    public function decrementControl(string $service = 'default', int $value = 0): void;
+    public function decrementControl(string $service = 'default', int $value = 1): void;
 
     /**
      * Mark the service as broken
@@ -31,8 +31,9 @@ interface AdapterInterface
      * Check if service is broken
      *
      * @param string $service
+     * @return bool
      */
-    public function isBroken(string $service = 'default'): void;
+    public function isBroken(string $service = 'default'): bool;
 
     /**
      * Return the time when break is started

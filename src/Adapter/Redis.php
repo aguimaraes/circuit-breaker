@@ -23,58 +23,82 @@ class Redis implements AdapterInterface
     }
 
     /**
-     * @inheritdoc
+     * Increment the service control counter
+     *
+     * @param string $service
+     * @param int $value
      */
-    public function setErrorCount(string $service = 'default', int $value = 0): void
+    public function incrementControl(string $service = 'default', int $value = 1): void
     {
-        $this->redis->set(
-            sprintf('%s.%s.error_count', $this->prefix, $service),
+        $this->redis->incrby(
+            sprintf('%s.%s.control', $this->prefix, $service),
             $value
         );
     }
 
     /**
-     * @inheritdoc
+     * Decrement the service control counter
+     *
+     * @param string $service
+     * @param int $value
      */
-    public function getErrorCount(string $service = 'default'): int
+    public function decrementControl(string $service = 'default', int $value = 1): void
     {
-        return $this->getKey(
-            sprintf('%s.%s.error_count', $this->prefix, $service)
+        $this->redis->decrby(
+            sprintf('%s.%s.control', $this->prefix, $service),
+            $value
         );
     }
 
     /**
-     * @inheritdoc
+     * Mark the service as broken
+     *
+     * @param string $service
      */
-    public function getLastCheck(string $service = 'default'): int
-    {
-        return $this->getKey(
-            sprintf('%s.%s.last_check', $this->prefix, $service)
-        );
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function updateLastCheck(string $service = 'default'): int
+    public function circuitBreak(string $service = 'default'): void
     {
         $this->redis->set(
-            sprintf('%s.%s.last_check', $this->prefix, $service),
+            sprintf('%s.%s.break', $this->prefix, $service),
             time()
         );
     }
 
     /**
-     * @param string $key
+     * Check if service is broken
      *
+     * @param string $service
+     * @return bool
+     */
+    public function isBroken(string $service = 'default'): bool
+    {
+        return (bool) $this->redis->exists(
+            sprintf('%s.%s.break', $this->prefix, $service)
+        );
+    }
+
+    /**
+     * Return the time when break is started
+     *
+     * @param string $service
      * @return int
      */
-    private function getKey(string $key): int
+    public function getBrokenTime(string $service = 'default'): int
     {
-        if (!$this->redis->exists($key)) {
-            return 0;
-        }
+        return (int) $this->redis->get(
+            sprintf('%s.%s.break', $this->prefix, $service)
+        );
+    }
 
-        return (int) $this->redis->get($key);
+    /**
+     * Returns how many time rest to expire the break
+     *
+     * @param string $service
+     * @return int
+     */
+    public function getBreakTTL(string $service = 'default'): int
+    {
+        return $this->redis->ttl(
+            sprintf('%s.%s.break', $this->prefix, $service)
+        );
     }
 }
