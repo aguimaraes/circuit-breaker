@@ -1,5 +1,7 @@
 # circuit-breaker
 
+[![CircleCI](https://circleci.com/gh/aguimaraes/circuit-breaker/tree/master.svg?style=svg)](https://circleci.com/gh/aguimaraes/circuit-breaker/tree/master)
+
 ### Usage example
 
 ```php
