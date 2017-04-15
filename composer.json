@@ -2,7 +2,7 @@
     "name": "aguimaraes/circuit-breaker",
     "description": "Implementation of the circuit breaker pattern",
     "type": "library",
-    "license": "MIT",
+    "license": "Apache-2.0",
     "require": {
         "php": "^5.6"
     },
