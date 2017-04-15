@@ -17,6 +17,6 @@ machine:
 ## Customize test commands
 test:
   override:
-    - vendor/bin/phpunit
-      pwd:
-        circuit-breaker
+    - vendor/bin/phpunit:
+        pwd:
+          circuit-breaker
