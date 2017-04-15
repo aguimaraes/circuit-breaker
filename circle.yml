@@ -1,0 +1,22 @@
+machine:
+
+  timezone:
+    Europe/Berlin
+
+  # Version of php to use
+  php:
+    version:
+      5.6.30
+
+  override:
+    - composer install --no-interaction:
+       pwd:
+         circuit-breaker
+
+  cache_directories:
+    - "vendor"   # relative to the build directory
+
+## Customize test commands
+test:
+  override:
+    - vendor/bin/phpunit
