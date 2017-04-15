@@ -9,7 +9,9 @@ machine:
       5.6.30
 
   override:
-    - composer install --no-interaction
+    - composer install --no-interaction:
+       pwd:
+         circuit-breaker
 
   cache_directories:
     - "vendor"   # relative to the build directory
@@ -17,6 +19,4 @@ machine:
 ## Customize test commands
 test:
   override:
-    - vendor/bin/phpunit:
-        pwd:
-          circuit-breaker
+    - vendor/bin/phpunit
