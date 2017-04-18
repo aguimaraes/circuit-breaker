@@ -5,9 +5,7 @@ machine:
 
   # Version of php to use
   php:
-    version:
-      7.0.17
-
+    version: 7.0.17
   override:
     - composer install --no-interaction:
        pwd:
