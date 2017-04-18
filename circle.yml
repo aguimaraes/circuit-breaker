@@ -6,15 +6,12 @@ machine:
   # Version of php to use
   php:
     version:
-      5.6.30
+      7.0.17
 
   override:
     - composer install --no-interaction:
        pwd:
          circuit-breaker
-
-  cache_directories:
-    - "vendor"   # relative to the build directory
 
 ## Customize test commands
 test:
