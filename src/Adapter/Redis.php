@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 namespace Aguimaraes\Adapter;
 
 use Predis\ClientInterface;
@@ -24,7 +25,7 @@ class Redis implements AdapterInterface
     /**
      * @inheritdoc
      */
-    public function setErrorCount($service = 'default', $value = 0)
+    public function setErrorCount(string $service = 'default', int $value = 0): void
     {
         $this->redis->set(
             sprintf('%s.%s.error_count', $this->prefix, $service),
@@ -35,7 +36,7 @@ class Redis implements AdapterInterface
     /**
      * @inheritdoc
      */
-    public function getErrorCount($service = 'default')
+    public function getErrorCount(string $service = 'default'): int
     {
         return $this->getKey(
             sprintf('%s.%s.error_count', $this->prefix, $service)
@@ -45,7 +46,7 @@ class Redis implements AdapterInterface
     /**
      * @inheritdoc
      */
-    public function getLastCheck($service = 'default')
+    public function getLastCheck(string $service = 'default'): int
     {
         return $this->getKey(
             sprintf('%s.%s.last_check', $this->prefix, $service)
@@ -55,7 +56,7 @@ class Redis implements AdapterInterface
     /**
      * @inheritdoc
      */
-    public function updateLastCheck($service = 'default')
+    public function updateLastCheck(string $service = 'default'): int
     {
         $this->redis->set(
             sprintf('%s.%s.last_check', $this->prefix, $service),
@@ -68,7 +69,7 @@ class Redis implements AdapterInterface
      *
      * @return int
      */
-    private function getKey($key)
+    private function getKey(string $key): int
     {
         if (!$this->redis->exists($key)) {
             return 0;
