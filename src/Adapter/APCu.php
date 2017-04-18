@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 namespace Aguimaraes\Adapter;
 
 class APCu implements AdapterInterface
@@ -8,7 +9,7 @@ class APCu implements AdapterInterface
     /**
      * @inheritdoc
      */
-    public function setErrorCount($service = 'default', $value = 0)
+    public function setErrorCount(string $service = 'default', int $value = 0): void
     {
         apcu_store(
             sprintf('%s.%s.error_count', $this->prefix, $service),
@@ -19,7 +20,7 @@ class APCu implements AdapterInterface
     /**
      * @inheritdoc
      */
-    public function getErrorCount($service = 'default')
+    public function getErrorCount(string $service = 'default'): int
     {
         return (int) apcu_fetch(
             sprintf('%s.%s.error_count', $this->prefix, $service)
@@ -29,7 +30,7 @@ class APCu implements AdapterInterface
     /**
      * @inheritdoc
      */
-    public function getLastCheck($service = 'default')
+    public function getLastCheck(string $service = 'default'): int
     {
         return (int) apcu_fetch(
             sprintf('%s.%s.last_check', $this->prefix, $service)
@@ -39,7 +40,7 @@ class APCu implements AdapterInterface
     /**
      * @inheritdoc
      */
-    public function updateLastCheck($service = 'default')
+    public function updateLastCheck(string $service = 'default'): int
     {
         $time = time();
         apcu_store(

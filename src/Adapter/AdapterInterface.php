@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 namespace Aguimaraes\Adapter;
 
 interface AdapterInterface
@@ -7,26 +8,26 @@ interface AdapterInterface
      * @param string $service
      * @param int $value
      */
-    public function setErrorCount($service = 'default', $value = 0);
+    public function setErrorCount(string $service = 'default', int $value = 0): void;
 
     /**
      * @param string $service
      *
      * @return int
      */
-    public function getErrorCount($service = 'default');
+    public function getErrorCount(string $service = 'default'): int;
 
     /**
      * @param string $service
      *
      * @return int
      */
-    public function getLastCheck($service = 'default');
+    public function getLastCheck(string $service = 'default'): int;
 
     /**
      * @param string $service
      *
      * @return int
      */
-    public function updateLastCheck($service = 'default');
+    public function updateLastCheck(string $service = 'default'): int;
 }

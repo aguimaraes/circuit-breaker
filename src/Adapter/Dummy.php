@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types = 1);
+
 namespace Aguimaraes\Adapter;
 
 class Dummy implements AdapterInterface
@@ -16,7 +17,7 @@ class Dummy implements AdapterInterface
     /**
      * @inheritdoc
      */
-    public function setErrorCount($service = 'default', $value = 0)
+    public function setErrorCount(string $service = 'default', int $value = 0): void
     {
         $this->errorCount[$service] = $value;
     }
@@ -24,23 +25,23 @@ class Dummy implements AdapterInterface
     /**
      * @inheritdoc
      */
-    public function getErrorCount($service = 'default')
+    public function getErrorCount(string $service = 'default'): int
     {
-        return isset($this->errorCount[$service]) ? $this->errorCount[$service] : 0;
+        return $this->errorCount[$service] ?? 0;
     }
 
     /**
      * @inheritdoc
      */
-    public function getLastCheck($service = 'default')
+    public function getLastCheck(string $service = 'default'): int
     {
-        return isset($this->lastCheck[$service]) ? $this->lastCheck[$service] : 0;
+        return $this->lastCheck[$service] ?? 0;
     }
 
     /**
      * @inheritdoc
      */
-    public function updateLastCheck($service = 'default')
+    public function updateLastCheck(string $service = 'default'): int
     {
         return $this->lastCheck[$service] = time();
     }
