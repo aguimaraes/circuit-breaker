@@ -1,11 +1,10 @@
 machine:
-
-  timezone:
-    Europe/Berlin
-
-  # Version of php to use
   php:
     version: 7.0.17
+    timezone:
+        Europe/Berlin
+
+dependencies:
   override:
     - composer install --no-interaction:
        pwd:
