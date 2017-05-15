@@ -11,17 +11,17 @@ interface CircuitBreakerInterface
      *
      * @return bool
      */
-    public function isAvailable(string $service = 'default'): bool;
+    public function isAvailable($service = 'default');
 
     /**
      * @param string $service
      */
-    public function reportFailure(string $service = 'default'): void;
+    public function reportFailure($service = 'default');
 
     /**
      * @param string $service
      */
-    public function reportSuccess(string $service = 'default'): void;
+    public function reportSuccess($service = 'default');
 
     /**
      * @param string $service
@@ -29,13 +29,13 @@ interface CircuitBreakerInterface
      *
      * @return int
      */
-    public function getThreshold(string $service = 'default', int $default = 30): int;
+    public function getThreshold($service = 'default', $default = 30);
 
     /**
      * @param int $value
      * @param string $service
      */
-    public function setThreshold(int $value, string $service = 'default'): void;
+    public function setThreshold($value, $service = 'default');
 
     /**
      * @param string $service
@@ -43,7 +43,7 @@ interface CircuitBreakerInterface
      *
      * @return int
      */
-    public function getTimeout(string $service = 'default', int $default = 30): int;
+    public function getTimeout($service = 'default', $default = 30);
 
     /**
      * @param int $value
@@ -51,10 +51,10 @@ interface CircuitBreakerInterface
      *
      * @return mixed
      */
-    public function setTimeout(int $value, string $service = 'default');
+    public function setTimeout($value, $service = 'default');
 
     /**
      * @return AdapterInterface
      */
-    public function getAdapter(): AdapterInterface;
+    public function getAdapter();
 }

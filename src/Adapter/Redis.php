@@ -25,7 +25,7 @@ class Redis implements AdapterInterface
     /**
      * @inheritdoc
      */
-    public function setErrorCount(string $service = 'default', int $value = 0): void
+    public function setErrorCount($service = 'default', $value = 0)
     {
         $this->redis->set(
             sprintf('%s.%s.error_count', $this->prefix, $service),
@@ -36,7 +36,7 @@ class Redis implements AdapterInterface
     /**
      * @inheritdoc
      */
-    public function getErrorCount(string $service = 'default'): int
+    public function getErrorCount($service = 'default')
     {
         return $this->getKey(
             sprintf('%s.%s.error_count', $this->prefix, $service)
@@ -46,7 +46,7 @@ class Redis implements AdapterInterface
     /**
      * @inheritdoc
      */
-    public function getLastCheck(string $service = 'default'): int
+    public function getLastCheck($service = 'default')
     {
         return $this->getKey(
             sprintf('%s.%s.last_check', $this->prefix, $service)
@@ -56,7 +56,7 @@ class Redis implements AdapterInterface
     /**
      * @inheritdoc
      */
-    public function updateLastCheck(string $service = 'default'): int
+    public function updateLastCheck($service = 'default')
     {
         $this->redis->set(
             sprintf('%s.%s.last_check', $this->prefix, $service),
@@ -69,7 +69,7 @@ class Redis implements AdapterInterface
      *
      * @return int
      */
-    private function getKey(string $key): int
+    private function getKey($key)
     {
         if (!$this->redis->exists($key)) {
             return 0;
