@@ -62,17 +62,24 @@ class CircuitBreaker implements CircuitBreakerInterface
      */
     public function reportSuccess(string $service = 'default'): void
     {
-        if ($this->adapter->getErrorCount($service) > $this->getThreshold($service)) {
+        $errorCount = $this->getAdapter()->getErrorCount($service);
+        $threshold = $this->getThreshold($service);
+        
+        if ($errorCount === 0) {
+            return;
+        }
+
+        if ($errorCount > $threshold) {
             $this->adapter->setErrorCount(
                 $service,
-                $this->getThreshold($service) - 1
+                $threshold - 1
             );
             return;
         }
 
         $this->adapter->setErrorCount(
             $service,
-            $this->adapter->getErrorCount($service) - 1
+            $errorCount - 1
         );
     }
 
