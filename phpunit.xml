@@ -1,4 +1,4 @@
-<phpunit bootstrap="vendor/autoload.php">
+<phpunit bootstrap="vendor/autoload.php" colors="true" verbose="true">
     <testsuites>
         <testsuite name="circuit-breaker">
             <directory>tests</directory>

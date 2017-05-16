@@ -17,7 +17,7 @@ class Dummy implements AdapterInterface
     /**
      * @inheritdoc
      */
-    public function setErrorCount(string $service = 'default', int $value = 0): void
+    public function setErrorCount($service = 'default', $value = 0)
     {
         $this->errorCount[$service] = $value;
     }
@@ -25,23 +25,23 @@ class Dummy implements AdapterInterface
     /**
      * @inheritdoc
      */
-    public function getErrorCount(string $service = 'default'): int
+    public function getErrorCount($service = 'default')
     {
-        return $this->errorCount[$service] ?? 0;
+        return isset($this->errorCount[$service]) ? $this->errorCount[$service] : 0;
     }
 
     /**
      * @inheritdoc
      */
-    public function getLastCheck(string $service = 'default'): int
+    public function getLastCheck($service = 'default')
     {
-        return $this->lastCheck[$service] ?? 0;
+        return isset($this->lastCheck[$service]) ? $this->lastCheck[$service] : 0;
     }
 
     /**
      * @inheritdoc
      */
-    public function updateLastCheck(string $service = 'default'): int
+    public function updateLastCheck($service = 'default')
     {
         return $this->lastCheck[$service] = time();
     }
