@@ -58,4 +58,19 @@ class CircuitBreakerTest extends TestCase
 
         $this->assertFalse($cb->isAvailable());
     }
+
+    public function testReportSuccessGoingNegative()
+    {
+        $dummy = new Dummy();
+
+        $cb = new CircuitBreaker($dummy);
+
+        $cb->setThreshold(1);
+        $cb->setTimeout(1);
+
+        $cb->reportSuccess();
+        $cb->reportSuccess();
+
+        $this->assertEquals(0, $cb->getAdapter()->getErrorCount());
+    }
 }
