@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php
 
 namespace Aguimaraes\Adapter;
 
@@ -75,6 +75,6 @@ class Redis implements AdapterInterface
             return 0;
         }
 
-        return (int) $this->redis->get($key);
+        return (int)$this->redis->get($key);
     }
 }

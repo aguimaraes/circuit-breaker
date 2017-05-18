@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php
 
 namespace Aguimaraes\Adapter;
 
@@ -17,17 +17,17 @@ class Dummy implements AdapterInterface
     /**
      * @inheritdoc
      */
-    public function setErrorCount($service = 'default', $value = 0)
+    public function getErrorCount($service = 'default')
     {
-        $this->errorCount[$service] = $value;
+        return isset($this->errorCount[$service]) ? $this->errorCount[$service] : 0;
     }
 
     /**
      * @inheritdoc
      */
-    public function getErrorCount($service = 'default')
+    public function setErrorCount($service = 'default', $value = 0)
     {
-        return isset($this->errorCount[$service]) ? $this->errorCount[$service] : 0;
+        $this->errorCount[$service] = $value;
     }
 
     /**

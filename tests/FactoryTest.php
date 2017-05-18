@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 namespace Aguimaras\Tests;
 
 use Aguimaraes\Adapter\APCu;

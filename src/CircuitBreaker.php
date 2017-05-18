@@ -45,6 +45,7 @@ class CircuitBreaker implements CircuitBreakerInterface
 
         if ($errorCount <= $this->getThreshold($service)) {
             $this->stats->available($service);
+
             return true;
         }
 
@@ -52,6 +53,7 @@ class CircuitBreaker implements CircuitBreakerInterface
 
         if ($lastCheck + $this->getTimeout($service) >= time()) {
             $this->stats->notAvailable($service);
+
             return false;
         }
 
@@ -80,7 +82,7 @@ class CircuitBreaker implements CircuitBreakerInterface
         $this->stats->success($service);
         $errorCount = $this->getAdapter()->getErrorCount($service);
         $threshold = $this->getThreshold($service);
-        
+
         if ($errorCount === 0) {
             return;
         }
@@ -90,6 +92,7 @@ class CircuitBreaker implements CircuitBreakerInterface
                 $service,
                 $threshold - 1
             );
+
             return;
         }
 
