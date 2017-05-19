@@ -1,4 +1,4 @@
-<?php declare(strict_types = 1);
+<?php
 
 namespace Aguimaraes\Adapter;
 
@@ -22,7 +22,7 @@ class APCu implements AdapterInterface
      */
     public function getErrorCount($service = 'default')
     {
-        return (int) apcu_fetch(
+        return (int)apcu_fetch(
             sprintf('%s.%s.error_count', $this->prefix, $service)
         );
     }
@@ -32,7 +32,7 @@ class APCu implements AdapterInterface
      */
     public function getLastCheck($service = 'default')
     {
-        return (int) apcu_fetch(
+        return (int)apcu_fetch(
             sprintf('%s.%s.last_check', $this->prefix, $service)
         );
     }

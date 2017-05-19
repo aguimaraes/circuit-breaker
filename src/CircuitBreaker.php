@@ -21,9 +21,19 @@ class CircuitBreaker implements CircuitBreakerInterface
      */
     private $timeout = [];
 
-    public function __construct(AdapterInterface $adapter)
+    /**
+     * @var Stats
+     */
+    private $stats;
+
+    /**
+     * @param AdapterInterface $adapter
+     * @param Stats|null $stats
+     */
+    public function __construct(AdapterInterface $adapter, Stats $stats = null)
     {
         $this->adapter = $adapter;
+        $this->stats = empty($stats) ? new Stats() : $stats;
     }
 
     /**
@@ -34,16 +44,22 @@ class CircuitBreaker implements CircuitBreakerInterface
         $errorCount = $this->adapter->getErrorCount($service);
 
         if ($errorCount <= $this->getThreshold($service)) {
+            $this->stats->available($service);
+
             return true;
         }
 
         $lastCheck = $this->adapter->getLastCheck($service);
 
         if ($lastCheck + $this->getTimeout($service) >= time()) {
+            $this->stats->notAvailable($service);
+
             return false;
         }
 
         $this->adapter->updateLastCheck($service);
+
+        $this->stats->available($service);
 
         return true;
     }
@@ -53,6 +69,7 @@ class CircuitBreaker implements CircuitBreakerInterface
      */
     public function reportFailure($service = 'default')
     {
+        $this->stats->failure($service);
         $this->adapter->setErrorCount($service, $this->adapter->getErrorCount($service) + 1);
         $this->adapter->updateLastCheck($service);
     }
@@ -62,9 +79,10 @@ class CircuitBreaker implements CircuitBreakerInterface
      */
     public function reportSuccess($service = 'default')
     {
+        $this->stats->success($service);
         $errorCount = $this->getAdapter()->getErrorCount($service);
         $threshold = $this->getThreshold($service);
-        
+
         if ($errorCount === 0) {
             return;
         }
@@ -74,6 +92,7 @@ class CircuitBreaker implements CircuitBreakerInterface
                 $service,
                 $threshold - 1
             );
+
             return;
         }
 
@@ -121,5 +140,13 @@ class CircuitBreaker implements CircuitBreakerInterface
     public function getAdapter()
     {
         return $this->adapter;
+    }
+
+    /**
+     * @return Stats
+     */
+    public function getStats()
+    {
+        return $this->stats;
     }
 }
