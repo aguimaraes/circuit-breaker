@@ -6,6 +6,7 @@ machine:
 
 dependencies:
   override:
+    - apt-get install php5-apcu
     - composer install --no-interaction
 
 ## Customize test commands
