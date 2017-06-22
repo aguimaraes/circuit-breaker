@@ -20,3 +20,18 @@ class APCuTest extends TestCase
         $this->assertEquals($time, $apcu->getLastCheck('another-test-service'));
     }
 }
+
+function time()
+{
+    return 40;
+}
+
+function apcu_store($key, $value)
+{
+    return $value;
+}
+
+function apcu_fetch($key)
+{
+    return 40;
+}
