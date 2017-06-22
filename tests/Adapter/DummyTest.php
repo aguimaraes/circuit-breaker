@@ -1,6 +1,6 @@
 <?php
 
-namespace Aguimaraes\Tests;
+namespace Aguimaraes\Tests\Adapter;
 
 use Aguimaraes\Adapter\Dummy;
 use PHPUnit\Framework\TestCase;

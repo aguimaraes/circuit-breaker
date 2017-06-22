@@ -4,7 +4,15 @@ namespace Aguimaraes\Adapter;
 
 class APCu implements AdapterInterface
 {
-    private $prefix = 'circuit_breaker';
+    /**
+     * @var string
+     */
+    private $prefix;
+
+    public function __construct($prefix = 'circuit_breaker')
+    {
+        $this->prefix = $prefix;
+    }
 
     /**
      * @inheritdoc
