@@ -1,6 +1,6 @@
 # circuit-breaker
 
-[![CircleCI](https://circleci.com/gh/aguimaraes/circuit-breaker/tree/master.svg?style=svg)](https://circleci.com/gh/aguimaraes/circuit-breaker/tree/master)
+[![CircleCI](https://circleci.com/gh/aguimaraes/circuit-breaker.svg?style=svg)](https://circleci.com/gh/aguimaraes/circuit-breaker)
 [![Coverage Status](https://coveralls.io/repos/github/aguimaraes/circuit-breaker/badge.svg)](https://coveralls.io/github/aguimaraes/circuit-breaker)
 
 ### Usage example
