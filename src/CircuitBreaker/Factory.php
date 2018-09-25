@@ -5,8 +5,6 @@ namespace Aguimaraes\CircuitBreaker;
 use Aguimaraes\Adapter\AdapterInterface;
 use Aguimaraes\Adapter\Dummy;
 use Aguimaraes\CircuitBreaker;
-use Aguimaraes\Stats;
-use League\StatsD\Client;
 
 class Factory
 {
@@ -26,11 +24,6 @@ class Factory
     protected $timeout;
 
     /**
-     * @var
-     */
-    protected $stats;
-
-    /**
      * @param AdapterInterface|null $adapter
      * @param int $threshold
      * @param int $timeout
@@ -43,22 +36,11 @@ class Factory
     }
 
     /**
-     * @param Client $stats
-     */
-    public function addStats(Client $stats)
-    {
-        $this->stats = $stats;
-    }
-
-    /**
      * @return CircuitBreaker
      */
     public function createCircuitBreaker()
     {
-        $cb = new CircuitBreaker(
-            $this->adapter,
-            new Stats($this->stats)
-        );
+        $cb = new CircuitBreaker($this->adapter);
         $cb->setThreshold($this->threshold);
         $cb->setTimeout($this->timeout);
 
