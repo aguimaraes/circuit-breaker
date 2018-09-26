@@ -18,8 +18,8 @@ jobs:
   test:
     docker:
       - image: circleci/php:7.2-node-browsers
-      environment:
-        CODECOV_TOKEN: 01e0fd5c-d23b-4efa-a2fc-544e54a74996
+        environment:
+          CODECOV_TOKEN: 01e0fd5c-d23b-4efa-a2fc-544e54a74996
     working_directory: ~/circuit-breaker
     steps:
       - checkout
