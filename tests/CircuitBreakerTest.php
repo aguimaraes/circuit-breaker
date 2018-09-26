@@ -73,4 +73,40 @@ class CircuitBreakerTest extends TestCase
 
         $this->assertEquals(0, $cb->getAdapter()->getErrorCount());
     }
+
+    public function testReportSuccessWhenAboveThreshold()
+    {
+        $dummy = new Dummy();
+
+        $cb = new CircuitBreaker($dummy);
+
+        $cb->setThreshold(1);
+        $cb->setTimeout(30);
+
+        $cb->reportFailure();
+        $cb->reportFailure();
+        $cb->reportFailure();
+
+        $cb->reportSuccess();
+
+        $this->assertEquals(0, $cb->getAdapter()->getErrorCount());
+    }
+
+    public function testReportSuccessWhenBelowThreshold()
+    {
+        $dummy = new Dummy();
+
+        $cb = new CircuitBreaker($dummy);
+
+        $cb->setThreshold(4);
+        $cb->setTimeout(30);
+
+        $cb->reportFailure();
+        $cb->reportFailure();
+        $cb->reportFailure();
+
+        $cb->reportSuccess();
+
+        $this->assertEquals(2, $cb->getAdapter()->getErrorCount());
+    }
 }

@@ -6,8 +6,9 @@ use Aguimaraes\Adapter\APCu;
 use Aguimaraes\Adapter\Dummy;
 use Aguimaraes\CircuitBreaker\Factory;
 use Aguimaraes\CircuitBreakerInterface;
+use PHPUnit\Framework\TestCase;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends TestCase
 {
     public function testInstanceCreationWithArguments()
     {
