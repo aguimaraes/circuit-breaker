@@ -1,6 +1,6 @@
 <?php
 
-namespace Aguimaraes\Adapter;
+namespace Aguimaraes\Tests\Adapter;
 
 use Aguimaraes\Adapter\Redis;
 use PHPUnit\Framework\TestCase;
@@ -44,15 +44,14 @@ class RedisTest extends TestCase
         $stub->expects($this->exactly(3))
             ->method('__call')
             ->withConsecutive(
-                ['set', ['test-prefix.another-test-service.last_check', 99]],
+                ['set', $this->callback(function($args) {
+                    return $args[0] === 'test-prefix.another-test-service.last_check'
+                        && $args[1] > 0;
+                })],
                 ['exists', ['test-prefix.another-test-service.last_check']],
                 ['get', ['test-prefix.another-test-service.last_check']]
             )->will($this->onConsecutiveCalls(null, true));
 
         return $stub;
     }
-}
-
-function time() {
-    return 99;
 }
