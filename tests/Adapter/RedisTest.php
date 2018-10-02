@@ -1,6 +1,6 @@
 <?php
 
-namespace Aguimaraes\Tests;
+namespace Aguimaraes\Adapter;
 
 use Aguimaraes\Adapter\Redis;
 use PHPUnit\Framework\TestCase;
@@ -16,6 +16,14 @@ class RedisTest extends TestCase
         $this->assertEquals($v, $redis->getErrorCount('test-service'));
     }
 
+    public function testLastCheck()
+    {
+        $redis = new Redis($this->mockLastCheckClient(), 'test-prefix');
+        $time = $redis->updateLastCheck('another-test-service');
+
+        $this->assertEquals($time, $redis->getLastCheck('another-test-service'));
+    }
+
     private function mockErrorCountClient(int $v)
     {
         $stub = $this->createMock(\Predis\ClientInterface::class);
@@ -29,4 +37,22 @@ class RedisTest extends TestCase
 
         return $stub;
     }
+
+    private function mockLastCheckClient()
+    {
+        $stub = $this->createMock(\Predis\ClientInterface::class);
+        $stub->expects($this->exactly(3))
+            ->method('__call')
+            ->withConsecutive(
+                ['set', ['test-prefix.another-test-service.last_check', 99]],
+                ['exists', ['test-prefix.another-test-service.last_check']],
+                ['get', ['test-prefix.another-test-service.last_check']]
+            )->will($this->onConsecutiveCalls(null, true));
+
+        return $stub;
+    }
+}
+
+function time() {
+    return 99;
 }
