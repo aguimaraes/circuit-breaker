@@ -4,8 +4,7 @@
     "type": "library",
     "license": "Apache-2.0",
     "require": {
-        "php": ">=7.2",
-        "league/statsd": "^1.4"
+        "php": ">=7.2"
     },
     "authors": [
         {
