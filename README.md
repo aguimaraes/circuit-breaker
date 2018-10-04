@@ -1,7 +1,7 @@
 # circuit-breaker
 
 [![CircleCI](https://circleci.com/gh/aguimaraes/circuit-breaker.svg?style=svg)](https://circleci.com/gh/aguimaraes/circuit-breaker)
-[![Coverage Status](https://coveralls.io/repos/github/aguimaraes/circuit-breaker/badge.svg)](https://coveralls.io/github/aguimaraes/circuit-breaker)
+[![codecov](https://codecov.io/gh/aguimaraes/circuit-breaker/branch/master/graph/badge.svg)](https://codecov.io/gh/aguimaraes/circuit-breaker)
 
 ### Usage example
 

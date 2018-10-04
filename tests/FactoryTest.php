@@ -6,9 +6,9 @@ use Aguimaraes\Adapter\APCu;
 use Aguimaraes\Adapter\Dummy;
 use Aguimaraes\CircuitBreaker\Factory;
 use Aguimaraes\CircuitBreakerInterface;
-use League\StatsD\Client;
+use PHPUnit\Framework\TestCase;
 
-class FactoryTest extends \PHPUnit_Framework_TestCase
+class FactoryTest extends TestCase
 {
     public function testInstanceCreationWithArguments()
     {
@@ -30,16 +30,5 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Dummy::class, $cb->getAdapter());
         $this->assertEquals(10, $cb->getThreshold());
         $this->assertEquals(120, $cb->getTimeout());
-    }
-
-    public function testInstanceCreationWithStats()
-    {
-        $factory = new Factory();
-
-        $factory->addStats(new Client());
-
-        $cb = $factory->createCircuitBreaker();
-
-        $this->assertInstanceOf(Client::class, $cb->getStats()->getClient());
     }
 }
