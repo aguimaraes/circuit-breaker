@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Type hints to the adapter interface
 - Type hints to the CircuitBreaker interface
+- Type hints to the Factory
 
 ### Changed
 - Require PHP from 7.2 to 7.0

@@ -1,6 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace Aguimaras\Tests;
+namespace Aguimaras\Tests\Factory;
 
 use Aguimaraes\Adapter\APCu;
 use Aguimaraes\Adapter\Dummy;
