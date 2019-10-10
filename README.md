@@ -11,10 +11,10 @@ $cb = new Aguimaraes\CircuitBreaker(
 );
 
 // number of errors necessary to open the circuit
-$cb->setThreshold(10, 'my-service'); 
+$cb->setThreshold('my-service', 10); 
 
 // wait x seconds to check if service is back
-$cb->setTimeout(60, 'my-service');
+$cb->setTimeout('my-service', 60);
 
 $response = null;
 

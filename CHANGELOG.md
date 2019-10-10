@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Master
 ### Added
+- Allow circuit breaker timeout and threshold defaults
+- Removed methods from circuit breaker interface 
 - Type hints to the adapter interface
 - Type hints to the CircuitBreaker interface
 - Type hints to the Factory

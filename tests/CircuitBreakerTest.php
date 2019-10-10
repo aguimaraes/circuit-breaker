@@ -12,24 +12,25 @@ class CircuitBreakerTest extends TestCase
     {
         $cb = new CircuitBreaker(new Dummy());
 
-        $cb->setThreshold(1);
+        $cb->setThreshold('default', 1);
 
-        $this->assertEquals(true, $cb->isAvailable());
+        $this->assertEquals(true, $cb->isAvailable('default'));
 
-        $cb->reportFailure();
+        $cb->reportFailure('default');
 
-        $this->assertTrue($cb->isAvailable());
+        $this->assertTrue($cb->isAvailable('default'));
     }
 
     public function testOpenCircuit()
     {
         $cb = new CircuitBreaker(new Dummy());
 
-        $cb->setThreshold(0);
+        $cb->setThreshold('default', 0);
 
-        $cb->reportFailure();
+        $cb->reportFailure('default');
 
-        $this->assertFalse($cb->isAvailable());
+        $this->assertFalse($cb->isAvailable('default'));
+        $this->assertTrue($cb->isAvailable('unknown'));
     }
 
     public function testHalfOpenCircuit()
@@ -38,25 +39,25 @@ class CircuitBreakerTest extends TestCase
 
         $cb = new CircuitBreaker($dummy);
 
-        $cb->setThreshold(1);
+        $cb->setThreshold('default', 1);
 
-        $cb->reportFailure();
+        $cb->reportFailure('default');
 
-        $this->assertTrue($cb->isAvailable());
+        $this->assertTrue($cb->isAvailable('default'));
 
-        $cb->reportFailure();
+        $cb->reportFailure('default');
 
-        $this->assertFalse($cb->isAvailable());
+        $this->assertFalse($cb->isAvailable('default'));
 
-        $cb->setTimeout(-30);
+        $cb->setTimeout('default', -30);
 
-        $this->assertTrue($cb->isAvailable());
+        $this->assertTrue($cb->isAvailable('default'));
 
-        $cb->reportFailure();
+        $cb->reportFailure('default');
 
-        $cb->setTimeout(30);
+        $cb->setTimeout('default', 30);
 
-        $this->assertFalse($cb->isAvailable());
+        $this->assertFalse($cb->isAvailable('default'));
     }
 
     public function testReportSuccessGoingNegative()
@@ -65,13 +66,13 @@ class CircuitBreakerTest extends TestCase
 
         $cb = new CircuitBreaker($dummy);
 
-        $cb->setThreshold(1);
-        $cb->setTimeout(1);
+        $cb->setThreshold('default', 1);
+        $cb->setTimeout('default', 1);
 
-        $cb->reportSuccess();
-        $cb->reportSuccess();
+        $cb->reportSuccess('default');
+        $cb->reportSuccess('default');
 
-        $this->assertEquals(0, $cb->getAdapter()->getErrorCount());
+        $this->assertEquals(0, $cb->getAdapter()->getErrorCount('default'));
     }
 
     public function testReportSuccessWhenAboveThreshold()
@@ -80,16 +81,16 @@ class CircuitBreakerTest extends TestCase
 
         $cb = new CircuitBreaker($dummy);
 
-        $cb->setThreshold(1);
-        $cb->setTimeout(30);
+        $cb->setThreshold('default', 1);
+        $cb->setTimeout('default', 30);
 
-        $cb->reportFailure();
-        $cb->reportFailure();
-        $cb->reportFailure();
+        $cb->reportFailure('default');
+        $cb->reportFailure('default');
+        $cb->reportFailure('default');
 
-        $cb->reportSuccess();
+        $cb->reportSuccess('default');
 
-        $this->assertEquals(0, $cb->getAdapter()->getErrorCount());
+        $this->assertEquals(0, $cb->getAdapter()->getErrorCount('default'));
     }
 
     public function testReportSuccessWhenBelowThreshold()
@@ -98,15 +99,15 @@ class CircuitBreakerTest extends TestCase
 
         $cb = new CircuitBreaker($dummy);
 
-        $cb->setThreshold(4);
-        $cb->setTimeout(30);
+        $cb->setThreshold('default', 4);
+        $cb->setTimeout('default', 30);
 
-        $cb->reportFailure();
-        $cb->reportFailure();
-        $cb->reportFailure();
+        $cb->reportFailure('default');
+        $cb->reportFailure('default');
+        $cb->reportFailure('default');
 
-        $cb->reportSuccess();
+        $cb->reportSuccess('default');
 
-        $this->assertEquals(2, $cb->getAdapter()->getErrorCount());
+        $this->assertEquals(2, $cb->getAdapter()->getErrorCount('default'));
     }
 }

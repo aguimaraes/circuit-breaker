@@ -40,10 +40,6 @@ class Factory
      */
     public function createCircuitBreaker(): CircuitBreaker
     {
-        $cb = new CircuitBreaker($this->adapter);
-        $cb->setThreshold($this->threshold);
-        $cb->setTimeout($this->timeout);
-
-        return $cb;
+        return new CircuitBreaker($this->adapter, $this->threshold, $this->timeout);
     }
 }
