@@ -6,6 +6,10 @@
     "require": {
         "php": ">=7.0"
     },
+    "suggest": {
+        "ext-acpu": "In order to use the APCu adapter",
+        "predis/predis": "In order to use the Redis adapter"
+    },
     "authors": [
         {
             "name": "Alvaro Guimaraes",
