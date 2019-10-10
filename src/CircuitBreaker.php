@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Aguimaraes;
 
@@ -32,7 +32,7 @@ class CircuitBreaker implements CircuitBreakerInterface
     /**
      * @inheritdoc
      */
-    public function isAvailable($service = 'default')
+    public function isAvailable(string $service = 'default'): bool
     {
         $errorCount = $this->adapter->getErrorCount($service);
 
@@ -54,7 +54,7 @@ class CircuitBreaker implements CircuitBreakerInterface
     /**
      * @inheritdoc
      */
-    public function reportFailure($service = 'default')
+    public function reportFailure(string $service = 'default')
     {
         $this->adapter->setErrorCount($service, $this->adapter->getErrorCount($service) + 1);
         $this->adapter->updateLastCheck($service);
@@ -63,7 +63,7 @@ class CircuitBreaker implements CircuitBreakerInterface
     /**
      * @inheritdoc
      */
-    public function reportSuccess($service = 'default')
+    public function reportSuccess(string $service = 'default')
     {
         $errorCount = $this->getAdapter()->getErrorCount($service);
         $threshold = $this->getThreshold($service);
@@ -90,15 +90,15 @@ class CircuitBreaker implements CircuitBreakerInterface
     /**
      * @inheritdoc
      */
-    public function getThreshold($service = 'default', $default = 30)
+    public function getThreshold(string $service = 'default', int $default = 30): int
     {
-        return isset($this->threshold[$service]) ? $this->threshold[$service] : $default;
+        return $this->threshold[$service] ?? $default;
     }
 
     /**
      * @inheritdoc
      */
-    public function setThreshold($value, $service = 'default')
+    public function setThreshold(int $value, string $service = 'default')
     {
         $this->threshold[$service] = $value;
     }
@@ -106,15 +106,15 @@ class CircuitBreaker implements CircuitBreakerInterface
     /**
      * @inheritdoc
      */
-    public function getTimeout($service = 'default', $default = 30)
+    public function getTimeout(string $service = 'default', int $default = 30): int
     {
-        return isset($this->timeout[$service]) ? $this->timeout[$service] : $default;
+        return $this->timeout[$service] ?? $default;
     }
 
     /**
      * @inheritdoc
      */
-    public function setTimeout($value, $service = 'default')
+    public function setTimeout(int $value, string $service = 'default')
     {
         $this->timeout[$service] = $value;
     }
@@ -122,7 +122,7 @@ class CircuitBreaker implements CircuitBreakerInterface
     /**
      * @inheritdoc
      */
-    public function getAdapter()
+    public function getAdapter(): AdapterInterface
     {
         return $this->adapter;
     }

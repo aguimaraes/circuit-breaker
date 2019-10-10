@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Aguimaraes;
 
@@ -11,17 +11,17 @@ interface CircuitBreakerInterface
      *
      * @return bool
      */
-    public function isAvailable($service = 'default');
+    public function isAvailable(string $service = 'default'): bool;
 
     /**
      * @param string $service
      */
-    public function reportFailure($service = 'default');
+    public function reportFailure(string $service = 'default');
 
     /**
      * @param string $service
      */
-    public function reportSuccess($service = 'default');
+    public function reportSuccess(string $service = 'default');
 
     /**
      * @param string $service
@@ -29,13 +29,13 @@ interface CircuitBreakerInterface
      *
      * @return int
      */
-    public function getThreshold($service = 'default', $default = 30);
+    public function getThreshold(string $service = 'default', int $default = 30): int;
 
     /**
      * @param int $value
      * @param string $service
      */
-    public function setThreshold($value, $service = 'default');
+    public function setThreshold(int $value, string $service = 'default');
 
     /**
      * @param string $service
@@ -43,7 +43,7 @@ interface CircuitBreakerInterface
      *
      * @return int
      */
-    public function getTimeout($service = 'default', $default = 30);
+    public function getTimeout(string $service = 'default', int $default = 30): int;
 
     /**
      * @param int $value
@@ -51,10 +51,10 @@ interface CircuitBreakerInterface
      *
      * @return mixed
      */
-    public function setTimeout($value, $service = 'default');
+    public function setTimeout(int $value, string $service = 'default');
 
     /**
      * @return AdapterInterface
      */
-    public function getAdapter();
+    public function getAdapter(): AdapterInterface;
 }
