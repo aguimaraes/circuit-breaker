@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Aguimaraes;
 
@@ -12,9 +12,19 @@ class CircuitBreaker implements CircuitBreakerInterface
     private $adapter;
 
     /**
+     * @var int
+     */
+    private $defaultThreshold;
+
+    /**
      * @var array
      */
     private $threshold = [];
+
+    /**
+     * @var int
+     */
+    private $defaultTimeout;
 
     /**
      * @var array
@@ -23,16 +33,20 @@ class CircuitBreaker implements CircuitBreakerInterface
 
     /**
      * @param AdapterInterface $adapter
+     * @param int $defaultThreshold The threshold to use when a service has no specified one
+     * @param int $defaultTimeout The timeout to use when a service has no specified one
      */
-    public function __construct(AdapterInterface $adapter)
+    public function __construct(AdapterInterface $adapter, $defaultThreshold = 30, $defaultTimeout = 30)
     {
         $this->adapter = $adapter;
+        $this->defaultThreshold = $defaultThreshold;
+        $this->defaultTimeout = $defaultTimeout;
     }
 
     /**
      * @inheritdoc
      */
-    public function isAvailable($service = 'default')
+    public function isAvailable(string $service): bool
     {
         $errorCount = $this->adapter->getErrorCount($service);
 
@@ -54,7 +68,7 @@ class CircuitBreaker implements CircuitBreakerInterface
     /**
      * @inheritdoc
      */
-    public function reportFailure($service = 'default')
+    public function reportFailure(string $service)
     {
         $this->adapter->setErrorCount($service, $this->adapter->getErrorCount($service) + 1);
         $this->adapter->updateLastCheck($service);
@@ -63,7 +77,7 @@ class CircuitBreaker implements CircuitBreakerInterface
     /**
      * @inheritdoc
      */
-    public function reportSuccess($service = 'default')
+    public function reportSuccess(string $service)
     {
         $errorCount = $this->getAdapter()->getErrorCount($service);
         $threshold = $this->getThreshold($service);
@@ -90,15 +104,15 @@ class CircuitBreaker implements CircuitBreakerInterface
     /**
      * @inheritdoc
      */
-    public function getThreshold($service = 'default', $default = 30)
+    public function getThreshold(string $service): int
     {
-        return isset($this->threshold[$service]) ? $this->threshold[$service] : $default;
+        return $this->threshold[$service] ?? $this->defaultThreshold;
     }
 
     /**
      * @inheritdoc
      */
-    public function setThreshold($value, $service = 'default')
+    public function setThreshold(string $service, int $value)
     {
         $this->threshold[$service] = $value;
     }
@@ -106,15 +120,15 @@ class CircuitBreaker implements CircuitBreakerInterface
     /**
      * @inheritdoc
      */
-    public function getTimeout($service = 'default', $default = 30)
+    public function getTimeout(string $service): int
     {
-        return isset($this->timeout[$service]) ? $this->timeout[$service] : $default;
+        return $this->timeout[$service] ?? $this->defaultTimeout;
     }
 
     /**
      * @inheritdoc
      */
-    public function setTimeout($value, $service = 'default')
+    public function setTimeout(string $service, int $value)
     {
         $this->timeout[$service] = $value;
     }
@@ -122,7 +136,7 @@ class CircuitBreaker implements CircuitBreakerInterface
     /**
      * @inheritdoc
      */
-    public function getAdapter()
+    public function getAdapter(): AdapterInterface
     {
         return $this->adapter;
     }

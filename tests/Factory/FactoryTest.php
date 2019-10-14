@@ -1,6 +1,6 @@
-<?php
+<?php declare(strict_types=1);
 
-namespace Aguimaras\Tests;
+namespace Aguimaras\Tests\Factory;
 
 use Aguimaraes\Adapter\APCu;
 use Aguimaraes\Adapter\Dummy;
@@ -17,8 +17,10 @@ class FactoryTest extends TestCase
 
         $this->assertInstanceOf(CircuitBreakerInterface::class, $cb);
         $this->assertInstanceOf(APCu::class, $cb->getAdapter());
-        $this->assertEquals(8, $cb->getThreshold());
-        $this->assertEquals(123, $cb->getTimeout());
+        $this->assertEquals(8, $cb->getThreshold('default'));
+        $this->assertEquals(8, $cb->getThreshold('no config'));
+        $this->assertEquals(123, $cb->getTimeout('default'));
+        $this->assertEquals(123, $cb->getTimeout('no config'));
     }
 
     public function testInstanceCreationWithoutArguments()
@@ -28,7 +30,7 @@ class FactoryTest extends TestCase
 
         $this->assertInstanceOf(CircuitBreakerInterface::class, $cb);
         $this->assertInstanceOf(Dummy::class, $cb->getAdapter());
-        $this->assertEquals(10, $cb->getThreshold());
-        $this->assertEquals(120, $cb->getTimeout());
+        $this->assertEquals(10, $cb->getThreshold(__METHOD__));
+        $this->assertEquals(120, $cb->getTimeout(__METHOD__));
     }
 }

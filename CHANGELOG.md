@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Master
+### Added
+- Allow circuit breaker timeout and threshold defaults
+- Removed methods from circuit breaker interface 
+- Type hints to the adapter interface
+- Type hints to the CircuitBreaker interface
+- Type hints to the Factory
+
+### Changed
+- Require PHP from 7.2 to 7.0
+- Require PHPUnit from 7 to 6
+
 ## [1.0.1] - 2018-10-04
 ### Removed
 - statsd from composer.json

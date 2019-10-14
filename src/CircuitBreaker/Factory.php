@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Aguimaraes\CircuitBreaker;
 
@@ -28,7 +28,7 @@ class Factory
      * @param int $threshold
      * @param int $timeout
      */
-    public function __construct(AdapterInterface $adapter = null, $threshold = 10, $timeout = 120)
+    public function __construct(AdapterInterface $adapter = null, int $threshold = 10, int $timeout = 120)
     {
         $this->adapter = $adapter instanceof AdapterInterface ? $adapter : new Dummy();
         $this->threshold = $threshold;
@@ -38,12 +38,8 @@ class Factory
     /**
      * @return CircuitBreaker
      */
-    public function createCircuitBreaker()
+    public function createCircuitBreaker(): CircuitBreaker
     {
-        $cb = new CircuitBreaker($this->adapter);
-        $cb->setThreshold($this->threshold);
-        $cb->setTimeout($this->timeout);
-
-        return $cb;
+        return new CircuitBreaker($this->adapter, $this->threshold, $this->timeout);
     }
 }

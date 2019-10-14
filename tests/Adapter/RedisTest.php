@@ -1,9 +1,10 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace Aguimaraes\Tests\Adapter;
 
 use Aguimaraes\Adapter\Redis;
 use PHPUnit\Framework\TestCase;
+use Predis\ClientInterface;
 
 class RedisTest extends TestCase
 {
@@ -24,9 +25,9 @@ class RedisTest extends TestCase
         $this->assertEquals($time, $redis->getLastCheck('another-test-service'));
     }
 
-    private function mockErrorCountClient(int $v)
+    private function mockErrorCountClient(int $v): ClientInterface
     {
-        $stub = $this->createMock(\Predis\ClientInterface::class);
+        $stub = $this->createMock(ClientInterface::class);
         $stub->expects($this->exactly(3))
             ->method('__call')
             ->withConsecutive(
@@ -38,19 +39,33 @@ class RedisTest extends TestCase
         return $stub;
     }
 
-    private function mockLastCheckClient()
+    private function mockLastCheckClient(): ClientInterface
     {
-        $stub = $this->createMock(\Predis\ClientInterface::class);
+        $lastUpdated = null;
+
+        $stub = $this->createMock(ClientInterface::class);
         $stub->expects($this->exactly(3))
             ->method('__call')
             ->withConsecutive(
-                ['set', $this->callback(function($args) {
-                    return $args[0] === 'test-prefix.another-test-service.last_check'
-                        && $args[1] > 0;
+                ['set', $this->callback(static function ($args) use (&$lastUpdated) {
+                    if ($args[0] === 'test-prefix.another-test-service.last_check' && $args[1] > 0) {
+                        $lastUpdated = $args[1];
+                        return true;
+                    }
+                    return false;
                 })],
                 ['exists', ['test-prefix.another-test-service.last_check']],
                 ['get', ['test-prefix.another-test-service.last_check']]
-            )->will($this->onConsecutiveCalls(null, true));
+            )
+            ->will(
+                $this->onConsecutiveCalls(
+                    null,
+                    true,
+                    $this->returnCallback(static function () use (&$lastUpdated) {
+                        return $lastUpdated;
+                    })
+                )
+            );
 
         return $stub;
     }
