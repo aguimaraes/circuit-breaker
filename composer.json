@@ -4,7 +4,7 @@
     "type": "library",
     "license": "Apache-2.0",
     "require": {
-        "php": ">=7.0"
+        "php": ">=7.3"
     },
     "suggest": {
         "ext-acpu": "In order to use the APCu adapter",
@@ -22,7 +22,7 @@
         }
     },
     "require-dev": {
-        "phpunit/phpunit": "^6",
+        "phpunit/phpunit": "^9",
         "predis/predis": "^1.1"
     }
 }
